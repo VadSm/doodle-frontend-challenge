@@ -16,18 +16,23 @@ export type TFetchMessagesParams = {
   before?: string;
 };
 
-export type TMessagesStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
+export enum EMessagesStatus {
+  Idle = 'idle',
+  Loading = 'loading',
+  Succeeded = 'succeeded',
+  Failed = 'failed',
+}
 
 export type TMessageState = {
-  items: TMessage[];
-  initialStatus: TMessagesStatus;
-  olderStatus: TMessagesStatus;
-  pollingStatus: TMessagesStatus;
-  sendingStatus: TMessagesStatus;
+  messages: TMessage[];
+  initialStatus: EMessagesStatus;
+  olderStatus: EMessagesStatus;
+  sendingStatus: EMessagesStatus;
   error: string | null;
   sendError: string | null;
   hasMoreOlder: boolean;
-  initialized: boolean;
+  isInitialized: boolean;
+  pollingStatus: EMessagesStatus;
 };
 
 export type TMessageRootState = {

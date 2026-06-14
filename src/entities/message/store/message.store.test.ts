@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { TMessage } from '../model/message.types';
+import { EMessagesStatus, type TMessage } from '../model/message.types';
 import { initialMessageState, messageReducer } from './message.store';
 import {
   fetchInitialMessages,
@@ -29,16 +29,16 @@ describe('messageReducer', () => {
       ),
     );
 
-    expect(state.initialStatus).toBe('succeeded');
-    expect(state.initialized).toBe(true);
-    expect(state.items.map(({ _id }) => _id)).toEqual(['1', '2']);
+    expect(state.initialStatus).toBe(EMessagesStatus.Succeeded);
+    expect(state.isInitialized).toBe(true);
+    expect(state.messages.map(({ _id }) => _id)).toEqual(['1', '2']);
     expect(state.hasMoreOlder).toBe(false);
   });
 
   it('prepends older messages and preserves existing messages', () => {
     const loadedState = {
       ...initialMessageState,
-      items: [
+      messages: [
         createMessage('2', '2026-06-14T10:02:00.000Z'),
         createMessage('3', '2026-06-14T10:03:00.000Z'),
       ],
@@ -55,14 +55,14 @@ describe('messageReducer', () => {
       ),
     );
 
-    expect(state.olderStatus).toBe('succeeded');
-    expect(state.items.map(({ _id }) => _id)).toEqual(['1', '2', '3']);
+    expect(state.olderStatus).toBe(EMessagesStatus.Succeeded);
+    expect(state.messages.map(({ _id }) => _id)).toEqual(['1', '2', '3']);
   });
 
   it('appends polled messages without duplicating existing ids', () => {
     const loadedState = {
       ...initialMessageState,
-      items: [createMessage('1', '2026-06-14T10:01:00.000Z')],
+      messages: [createMessage('1', '2026-06-14T10:01:00.000Z')],
     };
 
     const state = messageReducer(
@@ -76,7 +76,7 @@ describe('messageReducer', () => {
       ),
     );
 
-    expect(state.items.map(({ _id }) => _id)).toEqual(['1', '2']);
+    expect(state.messages.map(({ _id }) => _id)).toEqual(['1', '2']);
   });
 
   it('stores send errors separately from history errors', () => {
@@ -85,7 +85,7 @@ describe('messageReducer', () => {
       sendMessage.rejected(null, 'request-id', 'Hello', 'Unable to send'),
     );
 
-    expect(state.sendingStatus).toBe('failed');
+    expect(state.sendingStatus).toBe(EMessagesStatus.Failed);
     expect(state.sendError).toBe('Unable to send');
     expect(state.error).toBeNull();
   });

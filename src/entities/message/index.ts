@@ -5,15 +5,7 @@ export {
   pollNewMessages,
   sendMessage,
 } from './store/message.thunks';
-export {
-  selectHasMoreOlderMessages,
-  selectInitialStatus,
-  selectIsInitialized,
-  selectIsOwnMessage,
-  selectMessageError,
-  selectMessages,
-  selectOlderStatus,
-  selectSendError,
-  selectSendingStatus,
-} from './store/message.selectors';
+export { getMessagesState } from './store/message.selectors';
+export { EMessagesStatus } from './model/message.types';
 export type { TMessage, TMessageState } from './model/message.types';
+export { MessageBubble } from './ui';

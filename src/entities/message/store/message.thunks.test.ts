@@ -3,7 +3,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { CHAT_AUTHOR } from '@/shared/config';
 
 import { messageApi } from '../api/message.api';
-import type { TMessageRootState } from '../model/message.types';
+import {
+  EMessagesStatus,
+  type TMessageRootState,
+} from '../model/message.types';
 import { MESSAGE_PAGE_SIZE } from './message.const';
 import {
   fetchInitialMessages,
@@ -18,9 +21,9 @@ const getState = (): TMessageRootState => ({
   messages: {
     error: null,
     hasMoreOlder: true,
-    initialStatus: 'succeeded',
-    initialized: true,
-    items: [
+    initialStatus: EMessagesStatus.Succeeded,
+    isInitialized: true,
+    messages: [
       {
         _id: 'oldest',
         author: 'Luka',
@@ -34,10 +37,10 @@ const getState = (): TMessageRootState => ({
         message: 'Newest',
       },
     ],
-    olderStatus: 'idle',
-    pollingStatus: 'idle',
+    olderStatus: EMessagesStatus.Idle,
+    pollingStatus: EMessagesStatus.Idle,
     sendError: null,
-    sendingStatus: 'idle',
+    sendingStatus: EMessagesStatus.Idle,
   },
 });
 

@@ -10,8 +10,9 @@ import {
   selectOldestMessageCreatedAt,
 } from './message.selectors';
 
-const getErrorMessage = (error: unknown): string =>
-  error instanceof Error ? error.message : 'Something went wrong';
+const getErrorMessage = (error: unknown): string => {
+  return error instanceof Error ? error.message : 'Something went wrong';
+};
 
 export const fetchInitialMessages = createAsyncThunk<
   TMessage[],

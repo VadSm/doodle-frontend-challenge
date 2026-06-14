@@ -1,40 +1,20 @@
 import { useEffect } from 'react';
 
+import { ChatMessagesList } from '@/features/chat-messages-list';
 import { SendMessageForm } from '@/features/send-message';
 import {
   fetchInitialMessages,
-  fetchOlderMessages,
+  getMessagesState,
   pollNewMessages,
-  selectHasMoreOlderMessages,
-  selectInitialStatus,
-  selectIsInitialized,
-  selectMessageError,
-  selectMessages,
-  selectOlderStatus,
-  selectSendError,
-  selectSendingStatus,
-  sendMessage,
 } from '@/entities/message';
 import { useAppDispatch, useAppSelector } from '@/shared/lib';
 import { AppFrame } from '@/shared/ui';
-
-import { ChatMessageList } from './chat-message-list';
 
 const MESSAGE_POLL_INTERVAL_MS = 5_000;
 
 export function ChatWidget() {
   const dispatch = useAppDispatch();
-  const messages = useAppSelector(selectMessages);
-  const initialStatus = useAppSelector(selectInitialStatus);
-  const olderStatus = useAppSelector(selectOlderStatus);
-  const sendingStatus = useAppSelector(selectSendingStatus);
-  const error = useAppSelector(selectMessageError);
-  const sendError = useAppSelector(selectSendError);
-  const hasMoreOlder = useAppSelector(selectHasMoreOlderMessages);
-  const isInitialized = useAppSelector(selectIsInitialized);
-  const isInitialLoading = initialStatus === 'loading';
-  const isLoadingOlder = olderStatus === 'loading';
-  const isSending = sendingStatus === 'loading';
+  const { isInitialized } = useAppSelector(getMessagesState);
 
   useEffect(() => {
     if (!isInitialized) {
@@ -58,29 +38,10 @@ export function ChatWidget() {
         aria-label="Doodle Chat"
         className="flex h-dvh w-full flex-col overflow-hidden"
       >
-        <ChatMessageList
-          error={error}
-          hasMoreOlder={hasMoreOlder}
-          isInitialLoading={isInitialLoading}
-          isLoadingOlder={isLoadingOlder}
-          messages={messages}
-          onLoadOlder={() => {
-            void dispatch(fetchOlderMessages());
-          }}
-          onRetry={() => {
-            void dispatch(fetchInitialMessages());
-          }}
-        />
+        <ChatMessagesList />
         <div className="shrink-0 bg-white/90 p-4">
           <div className="mx-auto max-w-[640px]">
-            <SendMessageForm
-              disabled={isInitialLoading}
-              error={sendError}
-              isSending={isSending}
-              onSend={async (message) => {
-                await dispatch(sendMessage(message)).unwrap();
-              }}
-            />
+            <SendMessageForm />
           </div>
         </div>
       </section>
