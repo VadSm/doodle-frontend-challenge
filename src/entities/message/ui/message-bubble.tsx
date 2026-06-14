@@ -14,7 +14,7 @@ export function MessageBubble({ message }: TMessageBubbleProps) {
     <article className={cn('flex w-full', isOwnMessage && 'justify-end')}>
       <div
         className={cn(
-          'w-fit max-w-[min(420px,88%)] rounded-md border px-4 py-3 shadow-sm',
+          'w-fit max-w-[240px] rounded-md border px-4 py-3 shadow-sm sm:max-w-[420px] md:max-w-[640px] md:px-6 md:py-5',
           isOwnMessage
             ? 'border-amber-200 bg-amber-100'
             : 'border-slate-200 bg-white',

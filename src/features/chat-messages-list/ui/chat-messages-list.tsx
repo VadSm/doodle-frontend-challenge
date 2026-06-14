@@ -24,7 +24,7 @@ export function ChatMessagesList() {
   return (
     <div
       aria-label="Message history"
-      className="min-h-0 flex-1 overflow-y-auto px-4 py-5"
+      className="min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-6"
       onScroll={handleScroll}
       ref={scrollRef}
     >
