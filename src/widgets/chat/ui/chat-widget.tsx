@@ -56,7 +56,7 @@ export function ChatWidget() {
     <AppFrame>
       <section
         aria-label="Doodle Chat"
-        className="flex min-h-dvh w-full flex-col"
+        className="flex h-dvh w-full flex-col overflow-hidden"
       >
         <ChatMessageList
           error={error}
@@ -71,14 +71,18 @@ export function ChatWidget() {
             void dispatch(fetchInitialMessages());
           }}
         />
-        <SendMessageForm
-          disabled={isInitialLoading}
-          error={sendError}
-          isSending={isSending}
-          onSend={async (message) => {
-            await dispatch(sendMessage(message)).unwrap();
-          }}
-        />
+        <div className="shrink-0 bg-white/90 p-4">
+          <div className="mx-auto max-w-[640px]">
+            <SendMessageForm
+              disabled={isInitialLoading}
+              error={sendError}
+              isSending={isSending}
+              onSend={async (message) => {
+                await dispatch(sendMessage(message)).unwrap();
+              }}
+            />
+          </div>
+        </div>
       </section>
     </AppFrame>
   );

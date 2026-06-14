@@ -54,15 +54,11 @@ export function SendMessageForm({
   };
 
   return (
-    <form
-      aria-label="Send message"
-      className="mx-auto w-full max-w-[640px] px-4 pb-4"
-      onSubmit={handleSubmit}
-    >
+    <form aria-label="Send message" className="w-full" onSubmit={handleSubmit}>
       <label className="sr-only" htmlFor={messageId}>
         Message
       </label>
-      <div className="rounded-md border border-slate-200 bg-white/90 p-2 shadow-sm backdrop-blur">
+      <div className="rounded-md border border-slate-200 p-2 shadow-sm backdrop-blur">
         <div className="flex items-end gap-2">
           <TextArea
             aria-describedby={`${messageId}-meta`}
