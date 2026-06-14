@@ -57,7 +57,11 @@ const messageSlice = createSlice({
         state.error = action.payload ?? 'Unable to load older messages';
       })
 
+      .addCase(pollNewMessages.pending, (state) => {
+        state.pollingStatus = EMessagesStatus.Loading;
+      })
       .addCase(pollNewMessages.fulfilled, (state, action) => {
+        state.pollingStatus = EMessagesStatus.Succeeded;
         state.messages = mergeMessages(state.messages, action.payload);
       })
       .addCase(pollNewMessages.rejected, (state) => {

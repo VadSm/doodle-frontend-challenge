@@ -3,18 +3,19 @@ import { useEffect } from 'react';
 import { ChatMessagesList } from '@/features/chat-messages-list';
 import { SendMessageForm } from '@/features/send-message';
 import {
+  EMessagesStatus,
   fetchInitialMessages,
   getMessagesState,
   pollNewMessages,
 } from '@/entities/message';
-import { useAppDispatch, useAppSelector } from '@/shared/lib';
+import { showErrorAlert, useAppDispatch, useAppSelector } from '@/shared/lib';
 import { AppFrame } from '@/shared/ui';
 
 const MESSAGE_POLL_INTERVAL_MS = 5_000;
 
 export function ChatWidget() {
   const dispatch = useAppDispatch();
-  const { isInitialized } = useAppSelector(getMessagesState);
+  const { isInitialized, pollingStatus } = useAppSelector(getMessagesState);
 
   useEffect(() => {
     if (!isInitialized) {
@@ -31,6 +32,12 @@ export function ChatWidget() {
       window.clearInterval(intervalId);
     };
   }, [dispatch]);
+
+  useEffect(() => {
+    if (pollingStatus === EMessagesStatus.Failed) {
+      showErrorAlert('Unable to refresh messages.');
+    }
+  }, [pollingStatus]);
 
   return (
     <AppFrame>
