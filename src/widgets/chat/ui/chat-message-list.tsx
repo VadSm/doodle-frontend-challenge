@@ -1,3 +1,4 @@
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { useLayoutEffect, useRef } from 'react';
 
 import type { TMessage } from '@/entities/message';
@@ -14,6 +15,7 @@ type TChatMessageListProps = {
 };
 
 const LOAD_OLDER_OFFSET = 120;
+const ESTIMATED_MESSAGE_HEIGHT = 132;
 
 export function ChatMessageList({
   error,
@@ -28,6 +30,13 @@ export function ChatMessageList({
   const previousFirstMessageIdRef = useRef<string | undefined>(undefined);
   const restoreScrollRef = useRef<{ height: number; top: number } | null>(null);
   const firstMessageId = messages.at(0)?._id;
+  const rowVirtualizer = useVirtualizer({
+    count: messages.length,
+    estimateSize: () => ESTIMATED_MESSAGE_HEIGHT,
+    getItemKey: (index) => messages[index]._id,
+    getScrollElement: () => scrollRef.current,
+    overscan: 8,
+  });
 
   useLayoutEffect(() => {
     const element = scrollRef.current;
@@ -74,9 +83,9 @@ export function ChatMessageList({
       onScroll={handleScroll}
       ref={scrollRef}
     >
-      <div className="mx-auto flex w-full max-w-[640px] flex-col gap-4">
+      <div className="mx-auto flex w-full max-w-[640px] flex-col">
         {isInitialLoading ? (
-          <p className="text-center text-sm text-slate-500" role="status">
+          <p className="py-4 text-center text-sm text-slate-500" role="status">
             Loading messages...
           </p>
         ) : null}
@@ -97,14 +106,33 @@ export function ChatMessageList({
         ) : null}
 
         {isLoadingOlder ? (
-          <p className="text-center text-sm text-slate-500" role="status">
+          <p className="py-4 text-center text-sm text-slate-500" role="status">
             Loading older messages...
           </p>
         ) : null}
 
-        {messages.map((message) => (
-          <MessageBubble key={message._id} message={message} />
-        ))}
+        <div
+          className="relative w-full"
+          style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
+        >
+          {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+            const message = messages[virtualRow.index];
+
+            return (
+              <div
+                className="absolute left-0 top-0 w-full pb-4"
+                data-index={virtualRow.index}
+                key={virtualRow.key}
+                ref={rowVirtualizer.measureElement}
+                style={{
+                  transform: `translateY(${virtualRow.start}px)`,
+                }}
+              >
+                <MessageBubble message={message} />
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
