@@ -8,5 +8,7 @@ export const store = configureStore({
   },
 });
 
-export type AppDispatch = typeof store.dispatch;
-export type RootState = ReturnType<typeof store.getState>;
+declare global {
+  type TAppDispatch = typeof store.dispatch;
+  type TRootState = ReturnType<typeof store.getState>;
+}

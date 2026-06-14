@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 
-type PanelHeaderProps = {
+type TPanelHeaderProps = {
   eyebrow: string;
   title: string;
   meta?: ReactNode;
 };
 
-export function PanelHeader({ eyebrow, meta, title }: PanelHeaderProps) {
+export function PanelHeader({ eyebrow, meta, title }: TPanelHeaderProps) {
   return (
     <header className="flex shrink-0 items-center justify-between gap-4 border-b border-slate-200 px-4 py-3 sm:px-5">
       <div className="min-w-0">

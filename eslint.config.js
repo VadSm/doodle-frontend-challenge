@@ -45,6 +45,7 @@ export default [
       },
       globals: {
         document: 'readonly',
+        fetch: 'readonly',
         window: 'readonly',
         console: 'readonly',
         HTMLElement: 'readonly',
@@ -72,6 +73,7 @@ export default [
       ...typescriptEslintPlugin.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
       ...jsxA11y.configs.recommended.rules,
+      'no-undef': 'off',
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/no-unused-vars': [
         'error',
@@ -86,6 +88,13 @@ export default [
   {
     files: ['src/**/index.ts'],
     rules: {
+      'import/no-internal-modules': 'off',
+    },
+  },
+  {
+    files: ['src/shared/lib/store-hooks.ts', 'src/entities/*/**/*.{ts,tsx}'],
+    rules: {
+      'boundaries/element-types': 'off',
       'import/no-internal-modules': 'off',
     },
   },

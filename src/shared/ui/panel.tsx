@@ -2,12 +2,12 @@ import type { ReactNode } from 'react';
 
 import { cn } from '@/shared/lib';
 
-type PanelProps = {
+type TPanelProps = {
   children: ReactNode;
   className?: string;
 };
 
-export function Panel({ children, className }: PanelProps) {
+export function Panel({ children, className }: TPanelProps) {
   return (
     <section
       className={cn(
