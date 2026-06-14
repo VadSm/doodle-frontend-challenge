@@ -5,5 +5,3 @@ export const API_TOKEN =
   import.meta.env.VITE_API_TOKEN ?? 'super-secret-doodle-token';
 
 export const CHAT_AUTHOR = import.meta.env.VITE_CHAT_AUTHOR ?? 'You';
-
-export const MESSAGE_PAGE_SIZE = 50;

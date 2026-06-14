@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 
 import type { TMessage } from '@/entities/message';
 import { MessageBubble } from '@/entities/message/ui';
@@ -26,17 +26,26 @@ export function ChatMessageList({
 }: TChatMessageListProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const previousFirstMessageIdRef = useRef<string | undefined>(undefined);
+  const restoreScrollRef = useRef<{ height: number; top: number } | null>(null);
   const firstMessageId = messages.at(0)?._id;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const element = scrollRef.current;
     const previousFirstMessageId = previousFirstMessageIdRef.current;
     const hasLoadedOlderMessages =
       previousFirstMessageId !== undefined &&
       firstMessageId !== previousFirstMessageId;
 
-    if (element && messages.length > 0 && !hasLoadedOlderMessages) {
-      element.scrollTop = element.scrollHeight;
+    if (element && messages.length > 0) {
+      if (hasLoadedOlderMessages && restoreScrollRef.current) {
+        element.scrollTop =
+          element.scrollHeight -
+          restoreScrollRef.current.height +
+          restoreScrollRef.current.top;
+        restoreScrollRef.current = null;
+      } else if (!hasLoadedOlderMessages) {
+        element.scrollTop = element.scrollHeight;
+      }
     }
 
     previousFirstMessageIdRef.current = firstMessageId;
@@ -50,6 +59,10 @@ export function ChatMessageList({
       !isLoadingOlder &&
       !isInitialLoading
     ) {
+      restoreScrollRef.current = {
+        height: scrollRef.current.scrollHeight,
+        top: scrollRef.current.scrollTop,
+      };
       onLoadOlder();
     }
   };

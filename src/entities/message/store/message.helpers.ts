@@ -1,6 +1,5 @@
-import { MESSAGE_PAGE_SIZE } from '@/shared/config';
-
 import type { TMessage } from '../model/message.types';
+import { MESSAGE_PAGE_SIZE } from './message.const';
 
 export const sortMessagesChronologically = (messages: TMessage[]): TMessage[] =>
   [...messages].sort(

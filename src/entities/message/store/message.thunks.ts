@@ -1,9 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { CHAT_AUTHOR, MESSAGE_PAGE_SIZE } from '@/shared/config';
+import { CHAT_AUTHOR } from '@/shared/config';
 
 import { messageApi } from '../api/message.api';
 import type { TMessage, TMessageRootState } from '../model/message.types';
+import { MESSAGE_PAGE_SIZE } from './message.const';
 import {
   selectNewestMessageCreatedAt,
   selectOldestMessageCreatedAt,
@@ -18,7 +19,10 @@ export const fetchInitialMessages = createAsyncThunk<
   { rejectValue: string }
 >('messages/fetchInitial', async (_, { rejectWithValue }) => {
   try {
-    return await messageApi.fetchMessages({ limit: MESSAGE_PAGE_SIZE });
+    return await messageApi.fetchMessages({
+      before: new Date().toISOString(),
+      limit: MESSAGE_PAGE_SIZE,
+    });
   } catch (error) {
     return rejectWithValue(getErrorMessage(error));
   }
